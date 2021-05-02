@@ -29,6 +29,7 @@ client.connect(err => {
   const feedbackCollection = client.db("mosque").collection("feedbacks");
   const adminCollection = client.db("mosque").collection("admins");
   const donateCollection = client.db("mosque").collection("donates");
+  const prayerTimeCollection = client.db("mosque").collection("prayerTime");
 
 
   // app.post('/addService', (req, res) => {
@@ -57,6 +58,15 @@ client.connect(err => {
   })
 
 
+  app.post('/addPrayerTime', (req, res) => {
+    const prayerTime = req.body;
+    prayerTimeCollection.insertOne(prayerTime)
+      .then(result => {
+        res.send(result.insertedCount > 0)
+      })
+  })
+
+
   // app.post('/updatedOrder', (req, res) => {
   //   const updatedOrder = req.body;
   //   updatedOrderCollection.insertOne(updatedOrder)
@@ -74,6 +84,14 @@ client.connect(err => {
   })
 
 
+  app.get('/prayerTime', (req, res) => {
+    prayerTimeCollection.find()
+      .toArray((err, prayerTime) => {
+        res.send(prayerTime);
+      })
+  })
+
+
   app.get('/announcement', (req, res) => {
     announcementCollection.find()
       .toArray((err, announcement) => {
@@ -82,25 +100,37 @@ client.connect(err => {
   })
 
 
-//   app.get('/serviceBooking/:id', (req, res) => {
-//     const id = ObjectID(req.params.id)
-//     serviceCollection.find({ _id: id })
-//       .toArray((err, services) => {
-//         res.send(services[0]);
-//       })
-//   })
+  //   app.get('/serviceBooking/:id', (req, res) => {
+  //     const id = ObjectID(req.params.id)
+  //     serviceCollection.find({ _id: id })
+  //       .toArray((err, services) => {
+  //         res.send(services[0]);
+  //       })
+  //   })
 
 
-//   app.patch('/updateOrderList/:id', (req, res) => {
-//     const id = ObjectID(req.params.id)
-//         orderCollection.updateOne({ _id: id },
-//             {
-//                 $set: { status: req.body.status }
-//             })
-//             .then(result => {
-//                 res.send(result.modifiedCount > 0 )
-//             })
-//     })
+  //   app.patch('/updateOrderList/:id', (req, res) => {
+  //     const id = ObjectID(req.params.id)
+  //         orderCollection.updateOne({ _id: id },
+  //             {
+  //                 $set: { status: req.body.status }
+  //             })
+  //             .then(result => {
+  //                 res.send(result.modifiedCount > 0 )
+  //             })
+  //     })
+
+
+  app.patch('/updatePrayerTime/:id', (req, res) => {
+    const id = ObjectID(req.params.id)
+    prayerTimeCollection.updateOne({ _id: id },
+      {
+        $set: { FAJR: req.body.FAJR, ZUHR: req.body.ZUHR, ASR: req.body.ASR, MAGRIB: req.body.MAGRIB, ISHA: req.body.ISHA, JUMAH: req.body.JUMAH }
+      })
+      .then(result => {
+        res.send(result.modifiedCount > 0)
+      })
+  })
 
 
   app.post('/addFeedback', (req, res) => {
@@ -133,20 +163,20 @@ client.connect(err => {
   app.post('/checkAdmin', (req, res) => {
     const email = req.body.email;
     adminCollection.find({ email: email })
-        .toArray((err, admins) => {
-            res.send(admins.length > 0);
-        })
-})
+      .toArray((err, admins) => {
+        res.send(admins.length > 0);
+      })
+  })
 
 
 
-//   app.post('/addOrder', (req, res) => {
-//     const newOrder = req.body;
-//     orderCollection.insertOne(newOrder)
-//       .then(result => {
-//         res.send(result.insertedCount > 0)
-//       })
-//   })
+  //   app.post('/addOrder', (req, res) => {
+  //     const newOrder = req.body;
+  //     orderCollection.insertOne(newOrder)
+  //       .then(result => {
+  //         res.send(result.insertedCount > 0)
+  //       })
+  //   })
 
 
 
@@ -168,20 +198,20 @@ client.connect(err => {
   })
 
 
-// app.get('/serviceList', (req, res) => {
-//     orderCollection.find({ email: req.query.email })
-//       .toArray((err, orders) => {
-//         res.send(orders);
-//       })
-//   })
+  // app.get('/serviceList', (req, res) => {
+  //     orderCollection.find({ email: req.query.email })
+  //       .toArray((err, orders) => {
+  //         res.send(orders);
+  //       })
+  //   })
 
 
-// app.get('/orderList', (req, res) => {
-//     orderCollection.find()
-//       .toArray((err, orders) => {
-//         res.send(orders);
-//       })
-//   })
+  // app.get('/orderList', (req, res) => {
+  //     orderCollection.find()
+  //       .toArray((err, orders) => {
+  //         res.send(orders);
+  //       })
+  //   })
 
-  
+
 });
