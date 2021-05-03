@@ -117,6 +117,15 @@ client.connect(err => {
       })
   })
 
+  
+  app.get('/showAnnouncement/:id', (req, res) => {
+    const id = ObjectID(req.params.id)
+    announcementCollection.find({ _id: id })
+      .toArray((err, announcement) => {
+        res.send(announcement[0]);
+      })
+  })
+
 
   //   app.patch('/updateOrderList/:id', (req, res) => {
   //     const id = ObjectID(req.params.id)
