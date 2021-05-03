@@ -109,6 +109,15 @@ client.connect(err => {
   //   })
 
 
+  app.get('/showEvent/:id', (req, res) => {
+    const id = ObjectID(req.params.id)
+    eventCollection.find({ _id: id })
+      .toArray((err, event) => {
+        res.send(event[0]);
+      })
+  })
+
+
   //   app.patch('/updateOrderList/:id', (req, res) => {
   //     const id = ObjectID(req.params.id)
   //         orderCollection.updateOne({ _id: id },
@@ -180,6 +189,16 @@ client.connect(err => {
 
 
 
+  app.post('/makeDonation', (req, res) => {
+    const newDonation = req.body;
+    donateCollection.insertOne(newDonation)
+      .then(result => {
+        res.send(result.insertedCount > 0)
+      })
+  })
+
+
+
   app.delete('/deleteEvent/:id', (req, res) => {
     const id = ObjectID(req.params.id)
     eventCollection.deleteOne({ _id: id })
@@ -206,12 +225,28 @@ client.connect(err => {
   //   })
 
 
+  app.get('/donationYouMade', (req, res) => {
+    donateCollection.find({ email: req.query.email })
+      .toArray((err, donates) => {
+        res.send(donates);
+      })
+  })
+
+
   // app.get('/orderList', (req, res) => {
   //     orderCollection.find()
   //       .toArray((err, orders) => {
   //         res.send(orders);
   //       })
   //   })
+
+
+  app.get('/donationList', (req, res) => {
+    donateCollection.find()
+      .toArray((err, donations) => {
+        res.send(donations);
+      })
+  })
 
 
 });
