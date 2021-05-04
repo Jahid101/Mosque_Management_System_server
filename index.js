@@ -117,7 +117,7 @@ client.connect(err => {
       })
   })
 
-  
+
   app.get('/showAnnouncement/:id', (req, res) => {
     const id = ObjectID(req.params.id)
     announcementCollection.find({ _id: id })
@@ -139,11 +139,35 @@ client.connect(err => {
   //     })
 
 
+  app.patch('/donationList/:id', (req, res) => {
+    const id = ObjectID(req.params.id)
+    donateCollection.updateOne({ _id: id },
+      {
+        $set: { status: req.body.status }
+      })
+      .then(result => {
+        res.send(result.modifiedCount > 0)
+      })
+  })
+
+
   app.patch('/updatePrayerTime/:id', (req, res) => {
     const id = ObjectID(req.params.id)
     prayerTimeCollection.updateOne({ _id: id },
       {
         $set: { FAJR: req.body.FAJR, ZUHR: req.body.ZUHR, ASR: req.body.ASR, MAGRIB: req.body.MAGRIB, ISHA: req.body.ISHA, JUMAH: req.body.JUMAH }
+      })
+      .then(result => {
+        res.send(result.modifiedCount > 0)
+      })
+  })
+
+
+  app.patch('/updateEvent/:id', (req, res) => {
+    const id = ObjectID(req.params.id)
+    eventCollection.updateOne({ _id: id },
+      {
+        $set: { name: req.body.name, eventDetails: req.body.eventDetails, eventBudget: req.body.eventBudget, image: req.body.image }
       })
       .then(result => {
         res.send(result.modifiedCount > 0)
