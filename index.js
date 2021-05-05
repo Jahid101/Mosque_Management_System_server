@@ -31,6 +31,7 @@ client.connect(err => {
   const donateCollection = client.db("mosque").collection("donates");
   const additionalCollection = client.db("mosque").collection("additionals");
   const prayerTimeCollection = client.db("mosque").collection("prayerTime");
+  const deletedEventCollection = client.db("mosque").collection("deletedEvents");
 
 
   // app.post('/addService', (req, res) => {
@@ -62,6 +63,15 @@ client.connect(err => {
   app.post('/addPrayerTime', (req, res) => {
     const prayerTime = req.body;
     prayerTimeCollection.insertOne(prayerTime)
+      .then(result => {
+        res.send(result.insertedCount > 0)
+      })
+  })
+
+
+  app.post('/deletedEvent', (req, res) => {
+    const deletedEvent = req.body;
+    deletedEventCollection.insertOne(deletedEvent)
       .then(result => {
         res.send(result.insertedCount > 0)
       })
@@ -101,6 +111,14 @@ client.connect(err => {
   })
 
 
+  app.get('/deletedEvent', (req, res) => {
+    deletedEventCollection.find()
+      .toArray((err, deletedEvent) => {
+        res.send(deletedEvent);
+      })
+  })
+
+
   //   app.get('/serviceBooking/:id', (req, res) => {
   //     const id = ObjectID(req.params.id)
   //     serviceCollection.find({ _id: id })
@@ -111,6 +129,24 @@ client.connect(err => {
 
 
   app.get('/showEvent/:id', (req, res) => {
+    const id = ObjectID(req.params.id)
+    eventCollection.find({ _id: id })
+      .toArray((err, event) => {
+        res.send(event[0]);
+      })
+  })
+
+
+  app.get('/updateAnnouncement/:id', (req, res) => {
+    const id = ObjectID(req.params.id)
+    announcementCollection.find({ _id: id })
+      .toArray((err, announcement) => {
+        res.send(announcement[0]);
+      })
+  })
+
+
+  app.get('/updateEvent/:id', (req, res) => {
     const id = ObjectID(req.params.id)
     eventCollection.find({ _id: id })
       .toArray((err, event) => {
