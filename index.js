@@ -29,6 +29,7 @@ client.connect(err => {
   const feedbackCollection = client.db("mosque").collection("feedbacks");
   const adminCollection = client.db("mosque").collection("admins");
   const donateCollection = client.db("mosque").collection("donates");
+  const additionalCollection = client.db("mosque").collection("additionals");
   const prayerTimeCollection = client.db("mosque").collection("prayerTime");
 
 
@@ -243,6 +244,15 @@ client.connect(err => {
   })
 
 
+  app.post('/otherAddition', (req, res) => {
+    const otherAddition = req.body;
+    additionalCollection.insertOne(otherAddition)
+      .then(result => {
+        res.send(result.insertedCount > 0)
+      })
+  })
+
+
 
   app.delete('/deleteEvent/:id', (req, res) => {
     const id = ObjectID(req.params.id)
@@ -302,4 +312,13 @@ client.connect(err => {
   })
 
 
+  app.get('/otherAdditionList', (req, res) => {
+    additionalCollection.find()
+      .toArray((err, addition) => {
+        res.send(addition);
+      })
+  })
+
+
 });
+
