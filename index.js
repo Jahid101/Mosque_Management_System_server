@@ -167,7 +167,19 @@ client.connect(err => {
     const id = ObjectID(req.params.id)
     eventCollection.updateOne({ _id: id },
       {
-        $set: { name: req.body.name, eventDetails: req.body.eventDetails, eventBudget: req.body.eventBudget, image: req.body.image }
+        $set: { name: req.body.name, eventDetails: req.body.eventDetails, eventBudget: req.body.eventBudget, imageURL: req.body.eventImage }
+      })
+      .then(result => {
+        res.send(result.modifiedCount > 0)
+      })
+  })
+
+
+  app.patch('/updateAnnouncement/:id', (req, res) => {
+    const id = ObjectID(req.params.id)
+    announcementCollection.updateOne({ _id: id },
+      {
+        $set: { title: req.body.title, announcementDetails: req.body.announcementDetails, imageURL: req.body.announcementImage }
       })
       .then(result => {
         res.send(result.modifiedCount > 0)
@@ -262,6 +274,14 @@ client.connect(err => {
     donateCollection.find({ email: req.query.email })
       .toArray((err, donates) => {
         res.send(donates);
+      })
+  })
+
+
+  app.get('/receivedDonation', (req, res) => {
+    donateCollection.find({ status: req.query.status })
+      .toArray((err, donation) => {
+        res.send(donation);
       })
   })
 
