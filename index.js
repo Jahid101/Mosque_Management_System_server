@@ -32,6 +32,7 @@ client.connect(err => {
   const additionalCollection = client.db("mosque").collection("additionals");
   const prayerTimeCollection = client.db("mosque").collection("prayerTime");
   const deletedEventCollection = client.db("mosque").collection("deletedEvents");
+  const fundCollection = client.db("mosque").collection("funds");
 
 
   // app.post('/addService', (req, res) => {
@@ -45,6 +46,15 @@ client.connect(err => {
   app.post('/addEvent', (req, res) => {
     const newEvent = req.body;
     eventCollection.insertOne(newEvent)
+      .then(result => {
+        res.send(result.insertedCount > 0)
+      })
+  })
+
+
+  app.post('/fund', (req, res) => {
+    const fund = req.body;
+    fundCollection.insertOne(fund)
       .then(result => {
         res.send(result.insertedCount > 0)
       })
