@@ -105,6 +105,14 @@ client.connect(err => {
   })
 
 
+  app.get('/CM', (req, res) => {
+    CMCollection.find()
+      .toArray((err, CM) => {
+        res.send(CM);
+      })
+  })
+
+
   app.get('/prayerTime', (req, res) => {
     prayerTimeCollection.find()
       .toArray((err, prayerTime) => {
@@ -174,6 +182,33 @@ client.connect(err => {
   })
 
 
+  app.get('/showCM/:id', (req, res) => {
+    const id = ObjectID(req.params.id)
+    CMCollection.find({ _id: id })
+      .toArray((err, CM) => {
+        res.send(CM[0]);
+      })
+  })
+
+
+  app.get('/updateCM/:id', (req, res) => {
+    const id = ObjectID(req.params.id)
+    CMCollection.find({ _id: id })
+      .toArray((err, CM) => {
+        res.send(CM[0]);
+      })
+  })
+
+
+  app.get('/showCMAdmin/:id', (req, res) => {
+    const id = ObjectID(req.params.id)
+    adminCollection.find({ _id: id })
+      .toArray((err, CMAdmin) => {
+        res.send(CMAdmin[0]);
+      })
+  })
+
+
   //   app.patch('/updateOrderList/:id', (req, res) => {
   //     const id = ObjectID(req.params.id)
   //         orderCollection.updateOne({ _id: id },
@@ -215,6 +250,25 @@ client.connect(err => {
     eventCollection.updateOne({ _id: id },
       {
         $set: { name: req.body.name, eventDetails: req.body.eventDetails, eventBudget: req.body.eventBudget, imageURL: req.body.eventImage }
+      })
+      .then(result => {
+        res.send(result.modifiedCount > 0)
+      })
+  })
+
+
+  app.patch('/updateCommitteeMember/:id', (req, res) => {
+    const id = ObjectID(req.params.id)
+    CMCollection.updateOne({ _id: id },
+      {
+        $set: {
+          name: req.body.name,
+          email: req.body.email,
+          designation: req.body.designation,
+          details: req.body.details,
+          phone: req.body.phone,
+          imageURL: req.body.imageURL
+        }
       })
       .then(result => {
         res.send(result.modifiedCount > 0)
@@ -299,10 +353,18 @@ client.connect(err => {
   })
 
 
-
   app.delete('/deleteEvent/:id', (req, res) => {
     const id = ObjectID(req.params.id)
     eventCollection.deleteOne({ _id: id })
+      .then(result => {
+        res.send(result.deletedCount > 0)
+      })
+  })
+
+
+  app.delete('/deleteCM/:id', (req, res) => {
+    const id = ObjectID(req.params.id)
+    CMCollection.deleteOne({ _id: id })
       .then(result => {
         res.send(result.deletedCount > 0)
       })
@@ -330,6 +392,14 @@ client.connect(err => {
     donateCollection.find({ email: req.query.email })
       .toArray((err, donates) => {
         res.send(donates);
+      })
+  })
+
+
+  app.get('/CMAdmin', (req, res) => {
+    adminCollection.find({ email: req.query.email })
+      .toArray((err, CM) => {
+        res.send(CM[0]);
       })
   })
 
