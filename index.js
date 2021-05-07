@@ -34,6 +34,7 @@ client.connect(err => {
   const deletedEventCollection = client.db("mosque").collection("deletedEvents");
   const CMCollection = client.db("mosque").collection("committeeMembers");
   const OMCollection = client.db("mosque").collection("otherMembers");
+  const WSCollection = client.db("mosque").collection("additionalSpendings");
 
 
   // app.post('/addService', (req, res) => {
@@ -43,6 +44,7 @@ client.connect(err => {
   //       res.send(result.insertedCount > 0)
   //     })
   // })
+
 
   app.post('/addEvent', (req, res) => {
     const newEvent = req.body;
@@ -74,6 +76,15 @@ client.connect(err => {
   app.post('/addOM', (req, res) => {
     const OM = req.body;
     OMCollection.insertOne(OM)
+      .then(result => {
+        res.send(result.insertedCount > 0)
+      })
+  })
+
+
+  app.post('/addWS', (req, res) => {
+    const AS = req.body;
+    WSCollection.insertOne(AS)
       .then(result => {
         res.send(result.insertedCount > 0)
       })
@@ -131,6 +142,14 @@ client.connect(err => {
   })
 
 
+  app.get('/WSList', (req, res) => {
+    WSCollection.find()
+      .toArray((err, WS) => {
+        res.send(WS);
+      })
+  })
+
+
   app.get('/prayerTime', (req, res) => {
     prayerTimeCollection.find()
       .toArray((err, prayerTime) => {
@@ -169,6 +188,15 @@ client.connect(err => {
     eventCollection.find({ _id: id })
       .toArray((err, event) => {
         res.send(event[0]);
+      })
+  })
+
+
+  app.get('/showWork/:id', (req, res) => {
+    const id = ObjectID(req.params.id)
+    WSCollection.find({ _id: id })
+      .toArray((err, work) => {
+        res.send(work[0]);
       })
   })
 
