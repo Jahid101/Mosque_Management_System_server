@@ -33,6 +33,7 @@ client.connect(err => {
   const prayerTimeCollection = client.db("mosque").collection("prayerTime");
   const deletedEventCollection = client.db("mosque").collection("deletedEvents");
   const CMCollection = client.db("mosque").collection("committeeMembers");
+  const OMCollection = client.db("mosque").collection("otherMembers");
 
 
   // app.post('/addService', (req, res) => {
@@ -64,6 +65,15 @@ client.connect(err => {
   app.post('/addAnnouncement', (req, res) => {
     const announcement = req.body;
     announcementCollection.insertOne(announcement)
+      .then(result => {
+        res.send(result.insertedCount > 0)
+      })
+  })
+
+
+  app.post('/addOM', (req, res) => {
+    const OM = req.body;
+    OMCollection.insertOne(OM)
       .then(result => {
         res.send(result.insertedCount > 0)
       })
@@ -109,6 +119,14 @@ client.connect(err => {
     CMCollection.find()
       .toArray((err, CM) => {
         res.send(CM);
+      })
+  })
+
+
+  app.get('/OM', (req, res) => {
+    OMCollection.find()
+      .toArray((err, OM) => {
+        res.send(OM);
       })
   })
 
@@ -191,11 +209,29 @@ client.connect(err => {
   })
 
 
+  app.get('/showOM/:id', (req, res) => {
+    const id = ObjectID(req.params.id)
+    OMCollection.find({ _id: id })
+      .toArray((err, OM) => {
+        res.send(OM[0]);
+      })
+  })
+
+
   app.get('/updateCM/:id', (req, res) => {
     const id = ObjectID(req.params.id)
     CMCollection.find({ _id: id })
       .toArray((err, CM) => {
         res.send(CM[0]);
+      })
+  })
+
+
+  app.get('/updateOM/:id', (req, res) => {
+    const id = ObjectID(req.params.id)
+    OMCollection.find({ _id: id })
+      .toArray((err, OM) => {
+        res.send(OM[0]);
       })
   })
 
@@ -226,6 +262,18 @@ client.connect(err => {
     donateCollection.updateOne({ _id: id },
       {
         $set: { status: req.body.status }
+      })
+      .then(result => {
+        res.send(result.modifiedCount > 0)
+      })
+  })
+
+  
+  app.patch('/paySalary/:id', (req, res) => {
+    const id = ObjectID(req.params.id)
+    OMCollection.updateOne({ _id: id },
+      {
+        $set: { salaryStatus: req.body.salaryStatus }
       })
       .then(result => {
         res.send(result.modifiedCount > 0)
@@ -267,6 +315,26 @@ client.connect(err => {
           designation: req.body.designation,
           details: req.body.details,
           phone: req.body.phone,
+          imageURL: req.body.imageURL
+        }
+      })
+      .then(result => {
+        res.send(result.modifiedCount > 0)
+      })
+  })
+
+
+  app.patch('/updateOtherMember/:id', (req, res) => {
+    const id = ObjectID(req.params.id)
+    OMCollection.updateOne({ _id: id },
+      {
+        $set: {
+          name: req.body.name,
+          email: req.body.email,
+          designation: req.body.designation,
+          details: req.body.details,
+          phone: req.body.phone,
+          salary: req.body.salary,
           imageURL: req.body.imageURL
         }
       })
@@ -371,6 +439,15 @@ client.connect(err => {
   })
 
 
+  app.delete('/deleteOM/:id', (req, res) => {
+    const id = ObjectID(req.params.id)
+    OMCollection.deleteOne({ _id: id })
+      .then(result => {
+        res.send(result.deletedCount > 0)
+      })
+  })
+
+
   app.delete('/deleteAnnouncement/:id', (req, res) => {
     const id = ObjectID(req.params.id)
     announcementCollection.deleteOne({ _id: id })
@@ -408,6 +485,14 @@ client.connect(err => {
     donateCollection.find({ status: req.query.status })
       .toArray((err, donation) => {
         res.send(donation);
+      })
+  })
+
+
+  app.get('/paidSalary', (req, res) => {
+    OMCollection.find({ salaryStatus: req.query.salaryStatus })
+      .toArray((err, salary) => {
+        res.send(salary);
       })
   })
 
