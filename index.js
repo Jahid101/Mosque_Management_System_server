@@ -118,6 +118,14 @@ client.connect(err => {
   // })
 
 
+  app.get('/admin', (req, res) => {
+    adminCollection.find()
+      .toArray((err, admin) => {
+        res.send(admin);
+      })
+  })
+
+
   app.get('/event', (req, res) => {
     eventCollection.find()
       .toArray((err, events) => {
