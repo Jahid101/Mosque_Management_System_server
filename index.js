@@ -428,6 +428,15 @@ client.connect(err => {
   })
 
 
+  app.post('/checkCM', (req, res) => {
+    const email = req.body.email;
+    CMCollection.find({ email: email })
+      .toArray((err, CM) => {
+        res.send(CM.length > 0);
+      })
+  })
+
+
 
   //   app.post('/addOrder', (req, res) => {
   //     const newOrder = req.body;
@@ -519,6 +528,14 @@ client.connect(err => {
 
   app.get('/receivedDonation', (req, res) => {
     donateCollection.find({ status: req.query.status })
+      .toArray((err, donation) => {
+        res.send(donation);
+      })
+  })
+
+
+  app.get('/donationTime', (req, res) => {
+    donateCollection.find({ donationTime: req.query.donationTime })
       .toArray((err, donation) => {
         res.send(donation);
       })
