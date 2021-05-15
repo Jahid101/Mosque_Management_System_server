@@ -157,7 +157,7 @@ client.connect(err => {
       })
   })
 
-
+  
   app.get('/prayerTime', (req, res) => {
     prayerTimeCollection.find()
       .toArray((err, prayerTime) => {
