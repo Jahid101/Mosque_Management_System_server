@@ -157,7 +157,7 @@ client.connect(err => {
       })
   })
 
-  
+
   app.get('/prayerTime', (req, res) => {
     prayerTimeCollection.find()
       .toArray((err, prayerTime) => {
@@ -304,7 +304,7 @@ client.connect(err => {
       })
   })
 
-  
+
   app.patch('/paySalary/:id', (req, res) => {
     const id = ObjectID(req.params.id)
     OMCollection.updateOne({ _id: id },
@@ -333,7 +333,14 @@ client.connect(err => {
     const id = ObjectID(req.params.id)
     eventCollection.updateOne({ _id: id },
       {
-        $set: { name: req.body.name, eventDetails: req.body.eventDetails, eventBudget: req.body.eventBudget, imageURL: req.body.eventImage }
+        $set: {
+          name: req.body.name,
+          eventDetails: req.body.eventDetails,
+          eventBudget: req.body.eventBudget,
+          eventStart: req.body.eventStart,
+          eventEnd: req.body.eventEnd,
+          imageURL: req.body.eventImage
+        }
       })
       .then(result => {
         res.send(result.modifiedCount > 0)
