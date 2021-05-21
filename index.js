@@ -525,6 +525,14 @@ client.connect(err => {
   })
 
 
+  app.get('/donationListDonateFor', (req, res) => {
+    donateCollection.find({ DonationFor: req.query.donateFor })
+      .toArray((err, donates) => {
+        res.send(donates);
+      })
+  })
+
+
   app.get('/donationYouMade', (req, res) => {
     donateCollection.find({ email: req.query.email })
       .toArray((err, donates) => {
