@@ -1,4 +1,5 @@
 const express = require('express')
+const nodemailer = require("nodemailer");
 const app = express()
 const MongoClient = require('mongodb').MongoClient;
 const ObjectID = require('mongodb').ObjectID;
@@ -17,6 +18,32 @@ app.get('/', (req, res) => {
 
 
 app.listen(PORT)
+
+
+
+function email() {
+
+  var transport = nodemailer.createTransport({
+    host: "smtp.mailtrap.io",
+    port: 2525,
+    auth: {
+      user: "454f34f7bdc4fa",
+      pass: "27b11e54f464d5"
+    }
+  });
+
+
+  let info = transporter.sendMail({
+    from: "jahidhasananik.official@gmail.com", // sender address
+    to: "a@gmail.com", // list of receivers
+    subject: "Hello", // Subject line
+    text: "Hello world", // plain text body
+    html: "<b>Hello world</b>", // html body
+  });
+
+}
+
+
 
 
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.9v095.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority`;
