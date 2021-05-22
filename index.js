@@ -321,7 +321,14 @@ client.connect(err => {
     const id = ObjectID(req.params.id)
     prayerTimeCollection.updateOne({ _id: id },
       {
-        $set: { FAJR: req.body.FAJR, ZUHR: req.body.ZUHR, ASR: req.body.ASR, MAGRIB: req.body.MAGRIB, ISHA: req.body.ISHA, JUMAH: req.body.JUMAH }
+        $set: {
+          FAJR: req.body.FAJR,
+          ZUHR: req.body.ZUHR,
+          ASR: req.body.ASR,
+          MAGRIB: req.body.MAGRIB,
+          ISHA: req.body.ISHA,
+          JUMAH: req.body.JUMAH
+        }
       })
       .then(result => {
         res.send(result.modifiedCount > 0)
