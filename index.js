@@ -1,5 +1,6 @@
 const express = require('express')
 const nodemailer = require("nodemailer");
+const Email = require('email-templates');
 const app = express()
 const MongoClient = require('mongodb').MongoClient;
 const ObjectID = require('mongodb').ObjectID;
@@ -11,6 +12,7 @@ const PORT = process.env.PORT || 9999;
 
 app.use(cors());
 app.use(bodyParser.json());
+app.use(express.json());
 
 app.get('/', (req, res) => {
   res.send('Welcome (^.^)');
@@ -21,28 +23,24 @@ app.listen(PORT)
 
 
 
-function email() {
-
-  var transport = nodemailer.createTransport({
-    host: "smtp.mailtrap.io",
-    port: 2525,
-    auth: {
-      user: "454f34f7bdc4fa",
-      pass: "27b11e54f464d5"
-    }
-  });
-
-
-  let info = transporter.sendMail({
-    from: "jahidhasananik.official@gmail.com", // sender address
-    to: "a@gmail.com", // list of receivers
-    subject: "Hello", // Subject line
-    text: "Hello world", // plain text body
-    html: "<b>Hello world</b>", // html body
-  });
-
+var transport = {
+  host: "smtp.mailtrap.io",
+  port: 2525,
+  auth: {
+    user: "454f34f7bdc4fa",
+    pass: "27b11e54f464d5"
+  }
 }
 
+var transporter = nodemailer.createTransport(transport)
+
+transporter.verify((error, success) => {
+  if (error) {
+    console.log(error);
+  } else {
+    console.log('All works fine, congratz!');
+  }
+});
 
 
 
@@ -64,13 +62,35 @@ client.connect(err => {
   const WSCollection = client.db("mosque").collection("additionalSpendings");
 
 
-  // app.post('/addService', (req, res) => {
-  //   const newService = req.body;
-  //   serviceCollection.insertOne(newService)
-  //     .then(result => {
-  //       res.send(result.insertedCount > 0)
-  //     })
-  // })
+
+  app.post('/send', (req, res) => {
+    const admin = 'jahidhasananik.official@gmail.com'
+    const email = req.body.email
+    const message = 'Hi'
+
+
+    var mail = {
+      from: admin,
+      to: email,
+      subject: 'Donation Received',
+
+      html: message
+    }
+
+    transporter.sendMail(mail, (err, data) => {
+      if (err) {
+        res.json({
+          msg: 'fail'
+        })
+      } else {
+        res.json({
+          msg: 'success'
+        })
+      }
+    })
+  })
+
+
 
 
   app.post('/addEvent', (req, res) => {
@@ -216,6 +236,15 @@ client.connect(err => {
   //         res.send(services[0]);
   //       })
   //   })
+
+
+  app.get('/donationList/:id', (req, res) => {
+    const id = ObjectID(req.params.id)
+    donateCollection.find({ _id: id })
+      .toArray((err, event) => {
+        res.send(event[0]);
+      })
+  })
 
 
   app.get('/showEvent/:id', (req, res) => {
