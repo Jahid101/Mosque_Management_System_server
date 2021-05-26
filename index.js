@@ -66,8 +66,8 @@ client.connect(err => {
   app.post('/send', (req, res) => {
     const admin = 'jahidhasananik.official@gmail.com'
     const email = req.body.email
-    const message = 'Hi'
-
+    const message = 'Donation Received'
+console.log(email);
 
     var mail = {
       from: admin,
@@ -79,6 +79,7 @@ client.connect(err => {
 
     transporter.sendMail(mail, (err, data) => {
       if (err) {
+        console.log(err);
         res.json({
           msg: 'fail'
         })
