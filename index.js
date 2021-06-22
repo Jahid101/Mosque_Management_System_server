@@ -27,8 +27,8 @@ var transport = {
   host: "smtp.mailtrap.io",
   port: 2525,
   auth: {
-    user: "454f34f7bdc4fa",
-    pass: "27b11e54f464d5"
+    user: "357327f20a9771",
+    pass: "8f6acd2f14142c"
   }
 }
 
@@ -66,7 +66,7 @@ client.connect(err => {
   app.post('/send', (req, res) => {
     const admin = 'jahidhasananik.official@gmail.com'
     const email = req.body.email
-    const message = 'Donation Received'
+    const message = 'Thanks for the donation. Your donation successfully Received'
 console.log(email);
 
     var mail = {
