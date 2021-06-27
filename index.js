@@ -157,14 +157,6 @@ console.log(email);
   })
 
 
-  // app.post('/updatedOrder', (req, res) => {
-  //   const updatedOrder = req.body;
-  //   updatedOrderCollection.insertOne(updatedOrder)
-  //     .then(result => {
-  //       res.send(result.insertedCount > 0)
-  //     })
-  // })
-
 
   app.get('/admin', (req, res) => {
     adminCollection.find()
@@ -229,14 +221,6 @@ console.log(email);
       })
   })
 
-
-  //   app.get('/serviceBooking/:id', (req, res) => {
-  //     const id = ObjectID(req.params.id)
-  //     serviceCollection.find({ _id: id })
-  //       .toArray((err, services) => {
-  //         res.send(services[0]);
-  //       })
-  //   })
 
 
   app.get('/donationList/:id', (req, res) => {
@@ -338,16 +322,6 @@ console.log(email);
   })
 
 
-  //   app.patch('/updateOrderList/:id', (req, res) => {
-  //     const id = ObjectID(req.params.id)
-  //         orderCollection.updateOne({ _id: id },
-  //             {
-  //                 $set: { status: req.body.status }
-  //             })
-  //             .then(result => {
-  //                 res.send(result.modifiedCount > 0 )
-  //             })
-  //     })
 
 
   app.patch('/donationList/:id', (req, res) => {
@@ -508,17 +482,6 @@ console.log(email);
   })
 
 
-
-  //   app.post('/addOrder', (req, res) => {
-  //     const newOrder = req.body;
-  //     orderCollection.insertOne(newOrder)
-  //       .then(result => {
-  //         res.send(result.insertedCount > 0)
-  //       })
-  //   })
-
-
-
   app.post('/makeDonation', (req, res) => {
     const newDonation = req.body;
     donateCollection.insertOne(newDonation)
@@ -571,14 +534,6 @@ console.log(email);
         res.send(result.deletedCount > 0)
       })
   })
-
-
-  // app.get('/serviceList', (req, res) => {
-  //     orderCollection.find({ email: req.query.email })
-  //       .toArray((err, orders) => {
-  //         res.send(orders);
-  //       })
-  //   })
 
 
   app.get('/donationListName', (req, res) => {
@@ -637,13 +592,6 @@ console.log(email);
   })
 
 
-  // app.get('/orderList', (req, res) => {
-  //     orderCollection.find()
-  //       .toArray((err, orders) => {
-  //         res.send(orders);
-  //       })
-  //   })
-
 
   app.get('/donationList', (req, res) => {
     donateCollection.find()
@@ -652,7 +600,6 @@ console.log(email);
       })
   })
 
-
   app.get('/otherAdditionList', (req, res) => {
     additionalCollection.find()
       .toArray((err, addition) => {
@@ -660,6 +607,4 @@ console.log(email);
       })
   })
 
-
 });
-
