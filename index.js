@@ -76,7 +76,7 @@ console.log(email);
 
       html: message
     }
-
+    
     transporter.sendMail(mail, (err, data) => {
       if (err) {
         console.log(err);
